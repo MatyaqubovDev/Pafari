@@ -1,5 +1,7 @@
 package com.example.pearbrowser
 
+import android.content.Intent
+import android.content.Intent.EXTRA_ORIGINATING_URI
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -20,7 +22,11 @@ class BrowseActivity : AppCompatActivity() {
         var buttonEnter = findViewById<Button>(R.id.btn_enter)
         var editText = findViewById<EditText>(R.id.et_website)
         webview.webViewClient = WebViewClient()
-        url = intent.extras?.getString("url").toString()
+        if (intent.type=="text/plain"){
+            url=intent.getStringExtra(Intent.EXTRA_TEXT).toString()
+        } else{
+            url = intent.extras?.getString("url").toString()
+        }
         editText.setText(url)
         webview.loadUrl(url)
         buttonEnter.setOnClickListener {

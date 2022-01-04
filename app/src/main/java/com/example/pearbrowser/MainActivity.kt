@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.webkit.URLUtil
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.core.view.isInvisible
 
@@ -26,9 +28,6 @@ class MainActivity : AppCompatActivity() {
 
     fun initViews() {
       editText = findViewById(R.id.et_website_home)
-
-//        editText.text = findViewById<EditText>(R.id.et_website_home).text
-//        webView.loadUrl(editText.text.toString())
     }
 
     fun enterWebPage(view: View) {
@@ -40,6 +39,26 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("url",url)
         startActivity(intent)
         Log.d(TAG, url);
+    }
+
+    fun shareUrl(view: android.view.View) {
+        url=editText.text.toString()
+        if (url.lowercase().contains("https://"))
+        else if (url.lowercase().contains("http://")) url="https://" + url.lowercase().substring(6)
+        else url="https://${url.lowercase()}"
+        if (URLUtil.isValidUrl(url)){
+            shareTextWith(url)
+        } else{
+            Toast.makeText(this, "narmalni yaz bo'masa chiqib get dasturdan", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun shareTextWith(text: String?) {
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.putExtra(Intent.EXTRA_TEXT, text)
+        intent.type = "text/plain"
+        startActivity(Intent.createChooser(intent, "Share"))
     }
 
 
