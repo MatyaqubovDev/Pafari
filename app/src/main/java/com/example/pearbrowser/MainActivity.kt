@@ -15,11 +15,9 @@ import androidx.core.net.toUri
 import androidx.core.view.isInvisible
 
 class MainActivity : AppCompatActivity() {
-    lateinit var url:String
+    lateinit var url: String
     val TAG = MainActivity::class.java.simpleName
     lateinit var editText: EditText
-    lateinit var webView: WebView
-    lateinit var button: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -27,39 +25,27 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initViews() {
-      editText = findViewById(R.id.et_website_home)
+        editText = findViewById(R.id.et_website_home)
     }
 
     fun enterWebPage(view: View) {
-        url=editText.text.toString()
-        if (url.lowercase().contains("https://"))
-        else if (url.lowercase().contains("http://")) url="https://" + url.lowercase().substring(6)
-        else url="https://${url.lowercase()}"
+        url = editText.text.toString()
         val intent = Intent(this, BrowseActivity::class.java)
-        intent.putExtra("url",url)
+        intent.putExtra("url", url)
         startActivity(intent)
         Log.d(TAG, url);
     }
 
     fun shareUrl(view: android.view.View) {
-        url=editText.text.toString()
-        if (url.lowercase().contains("https://"))
-        else if (url.lowercase().contains("http://")) url="https://" + url.lowercase().substring(6)
-        else url="https://${url.lowercase()}"
-        if (URLUtil.isValidUrl(url)){
-            shareTextWith(url)
-        } else{
-            Toast.makeText(this, "narmalni yaz bo'masa chiqib get dasturdan", Toast.LENGTH_SHORT).show()
-        }
+        url = editText.text.toString()
+        shareUrl(url)
     }
 
-    fun shareTextWith(text: String?) {
+    fun shareUrl(text: String?) {
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
         intent.putExtra(Intent.EXTRA_TEXT, text)
         intent.type = "text/plain"
         startActivity(Intent.createChooser(intent, "Share"))
     }
-
-
 }
